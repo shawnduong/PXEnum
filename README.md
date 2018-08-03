@@ -18,6 +18,7 @@ I AM NOT LIABLE FOR ANY DAMAGES CAUSED BY MISUSE OF THIS SOFTWARE.
 * OS
 * All Users
 * All Groups
+* All Super Users
 * All User IDs
 * All Online Users
 * All Users with a Home Directory
@@ -27,6 +28,19 @@ I AM NOT LIABLE FOR ANY DAMAGES CAUSED BY MISUSE OF THIS SOFTWARE.
 * Router IP Addresses
 * Open Local Ports
 * Public IP Addresses
+* Cron.d
+* Cron Hourly
+* Cron Daily
+* Cron Weekly
+* Cron Monthly
+* CPU
+* GPU
+* Architecture
+* Online Memory
+* Offline Memory
+* BIOS Vendor
+* BIOS Version
+* BIOS Release Date
 
 # TODO
 * Processes
@@ -34,7 +48,6 @@ I AM NOT LIABLE FOR ANY DAMAGES CAUSED BY MISUSE OF THIS SOFTWARE.
 * Privilege escalation vulnerabilities specifically
 * Other hosts in the same network
 * Open ports on those hosts
-* Cron jobs
 * Files containing credentials
 * SSH keys
 * Keys in general
@@ -42,12 +55,10 @@ I AM NOT LIABLE FOR ANY DAMAGES CAUSED BY MISUSE OF THIS SOFTWARE.
 * Other networks in range
 * Files owned by root
 * Files owned by sudoers
-* sudoers
 * SUID files
 * Login logs
 * sudo logs
 * Passwords in the history
-* Hardware info
 * Saved passwords from browsers
 
 This list is incomplete. Be sure to let me know if I'm missing anything!

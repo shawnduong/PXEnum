@@ -41,6 +41,8 @@ users=`awk -F: '{print $1}' /etc/passwd | sort | tr '\n' ' '` 2>/dev/null
 echo "\e[36mAll users        : \e[39m$users"
 groups=`cut -d: -f1 /etc/group | sort | tr '\n' ' '` 2>/dev/null
 echo "\e[36mAll groups       : \e[39m$groups"
+sudoers=`cat /etc/group | grep 'sudo' | awk -F ':' '{print $4}' | tr '\n' ' '` 2>/dev/null
+echo "\e[36mSuper users      : \e[39m$sudoers"
 usersUIDs=`awk -F: '{printf "%s:%s\n",$1,$3}' /etc/passwd | sort | tr '\n' ' '` 2>/dev/null
 echo "\e[36mAll users + UIDs : \e[39m$usersUIDs"
 onlineUsers=`users` 2>/dev/null
@@ -60,7 +62,7 @@ echo
 echo "\e[31m--Password Exfiltration--\e[39m"
 passwords=`cat /etc/shadow | grep -v "*\|!" | sort` 2>/dev/null
 echo "\e[36mSuccessfully exfiltrated passwords : \e[39m"
-echo $passwords
+echo "$passwords"
 echo
 
 echo "\e[31m--Network Info--\e[39m"
@@ -75,3 +77,36 @@ echo "\e[36mLocally open ports  : \e[39m$openPorts"
 publicIP=`dig +short myip.opendns.com @resolver1.opendns.com` 2>/dev/null
 echo "\e[36mPublic IP address   : \e[39m$publicIP"
 echo
+
+echo "\e[31m--Processes--\e[39m"
+crond=`ls /etc/cron.d/ | tr '\n' ' '` 2>/dev/null
+echo "\e[36mcron.d       : \e[39m$crond"
+cronhourly=`ls /etc/cron.hourly/ | tr '\n' ' '` 2>/dev/null
+echo "\e[36mcron.hourly  : \e[39m$cronhourly"
+crondaily=`ls /etc/cron.daily/ | tr '\n' ' '` 2>/dev/null
+echo "\e[36mcron.daily   : \e[39m$crondaily"
+cronweekly=`ls /etc/cron.weekly/ | tr '\n' ' '` 2>/dev/null
+echo "\e[36mcron.weekly  : \e[39m$cronweekly"
+cronmonthly=`ls /etc/cron.monthly/ | tr '\n' ' '` 2>/dev/null
+echo "\e[36mcron.monthly : \e[39m$cronmonthly"
+echo
+
+echo "\e[31m--Hardware Info--\e[39m"
+cpu=`lscpu | grep 'Model name:' | awk -F ':' '{print $2}' | awk '{$1=$1};1'` 2>/dev/null
+echo "\e[36mCPU            : \e[39m$cpu"
+gpu=`lshw -C display | grep "product:" | awk -F ': ' '{print $2}'` 2>/dev/null
+echo "\e[36mGPU            : \e[39m$gpu"
+echo "\e[36mArchitecture   : \e[39m$architecture"
+memOnline=`lsmem | grep 'Total online memory:' | awk -F ':' '{print $2}' | awk '{$1=$1};1'` 2>/dev/null
+echo "\e[36mOnline memory  : \e[39m$memOnline"
+memOffline=`lsmem | grep 'Total offline memory:' | awk -F ':' '{print $2}' | awk '{$1=$1};1'` 2>/dev/null
+echo "\e[36mOffline memory : \e[39m$memOffline"
+echo
+
+echo "\e[31m--BIOS Info--\e[39m"
+biosVendor=`dmidecode | grep 'BIOS Information' -A 5 | grep 'Vendor' | awk -F ': ' '{print $2}'` 2>/dev/null
+echo "\e[36mBIOS Vendor       : \e[39m$biosVendor"
+biosVersion=`dmidecode | grep 'BIOS Information' -A 5 | grep 'Version' | awk -F ': ' '{print $2}'` 2>/dev/null
+echo "\e[36mBIOS Version      : \e[39m$biosVersion"
+biosReleaseDate=`dmidecode | grep 'BIOS Information' -A 5 | grep 'Release Date' | awk -F ': ' '{print $2}'` 2>/dev/null
+echo "\e[36mBIOS Release Date : \e[39m$biosReleaseDate"
