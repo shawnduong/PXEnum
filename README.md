@@ -16,23 +16,6 @@ I AM NOT LIABLE FOR ANY DAMAGES CAUSED BY MISUSE OF THIS SOFTWARE.
 * Version
 * Architecture
 * OS
-* All Users
-* All Groups
-* All Super Users
-* All User IDs
-* All Online Users
-* All Users with a Home Directory
-* Password Hashes
-* Network Interfaces
-* Local IP Addresses
-* Router IP Addresses
-* Open Local Ports
-* Public IP Addresses
-* Cron.d
-* Cron Hourly
-* Cron Daily
-* Cron Weekly
-* Cron Monthly
 * CPU
 * GPU
 * Architecture
@@ -41,17 +24,43 @@ I AM NOT LIABLE FOR ANY DAMAGES CAUSED BY MISUSE OF THIS SOFTWARE.
 * BIOS Vendor
 * BIOS Version
 * BIOS Release Date
+* All Users
+* All Groups
+* All Super Users
+* All User IDs
+* All Online Users
+* All Users with a Home Directory
+* Network Interfaces
+* Local IP Addresses
+* Router IP Addresses
+* Open Local Ports
+* Public IP Addresses
+* Country
+* Region
+* City
+* ZIP Code
+* Latitude
+* Longitude
+* Time Zone
+* ISP
+* Organization
+* AS Number
+* Cron.d
+* Cron Hourly
+* Cron Daily
+* Cron Weekly
+* Cron Monthly
+* User Processes
+* Password Hashes
+* SSH Keys
 
 # TODO
-* Processes
 * Vulnerabilities in general
 * Privilege escalation vulnerabilities specifically
 * Other hosts in the same network
 * Open ports on those hosts
 * Files containing credentials
-* SSH keys
 * Keys in general
-* Location of the machine
 * Other networks in range
 * Files owned by root
 * Files owned by sudoers

