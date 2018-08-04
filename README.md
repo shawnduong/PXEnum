@@ -67,6 +67,6 @@ I AM NOT LIABLE FOR ANY DAMAGES CAUSED BY MISUSE OF THIS SOFTWARE.
 * Apache2 Version
 
 # TODO
-* Made a todo list.
+* Make a todo list.
 
 This list is incomplete. Be sure to let me know if I'm missing anything!
