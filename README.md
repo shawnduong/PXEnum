@@ -16,6 +16,9 @@ $ git clone https://github.com/shawnduong/PXEnum
 $ wget https://raw.githubusercontent.com/shawnduong/PXEnum/master/PXEnume.sh
 ```
 
+# Usage
+$ sh PXEnum.sh
+
 # Checks
 * Username
 * Hostname
@@ -80,15 +83,3 @@ $ wget https://raw.githubusercontent.com/shawnduong/PXEnum/master/PXEnume.sh
 * wget Version
 * Ruby Version
 * Apache2 Version
-
-# TODO
-## Checks
-* All done!
-## Other
-* ✓ Finish all the todo checks
-* ✓ Polish it up
-* ✓ Coffee
-* ✓ Update README.md to include typical stuff like install directions.
-* Make a GitHub page
-* Call it v1.0
-* Call it a day
