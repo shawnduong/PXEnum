@@ -52,22 +52,24 @@ I AM NOT LIABLE FOR ANY DAMAGES CAUSED BY MISUSE OF THIS SOFTWARE.
 * Cron Monthly
 * User Processes
 * Password Hashes
+* SetUID Files
+* SetGID Files
 * SSH Keys
+* Bash Version
+* sudo Version
+* GCC Version
+* Python 2 Version
+* Python 3 Version
+* Java Version
+* cURL Version
+* wget Version
+* Ruby Version
+* Apache2 Version
 
 # TODO
-* Vulnerabilities in general
-* Privilege escalation vulnerabilities specifically
-* Other hosts in the same network
-* Open ports on those hosts
-* Files containing credentials
-* Keys in general
-* Other networks in range
-* Files owned by root
-* Files owned by sudoers
-* SUID files
+* A better way to handle gathering SSH keys
 * Login logs
 * sudo logs
-* Passwords in the history
 * Saved passwords from browsers
 
 This list is incomplete. Be sure to let me know if I'm missing anything!

@@ -140,8 +140,37 @@ passwords=`cat /etc/shadow | grep -v "*\|!" | sort` 2>/dev/null
 echo "\e[36mSuccessfully exfiltrated passwords : \e[39m$passwords"
 echo
 
-echo "\e[31m--Found SSH Keys--\e[39m"
-foundSSHKeys=`ls ~/.ssh/ | grep '.pub' | tr '\n' ' '` 2>/dev/null
-echo "\e[36m~/.ssh/ : \e[39m$foundSSHKeys"
+echo "\e[31m--SetUID/SetGID Files--\e[31m"
+suidFiles=`find / -perm /6000` 2>/dev/null
+echo "\e[36mFound : \e[39m"
+echo "$suidFiles"
+echo
+
+echo "\e[31m--SSH Keys--\e[39m"
+foundSSHKeys=`ls ~/.ssh/ | grep '.pub\|rsa' | tr '\n' ' '` 2>/dev/null
+echo "\e[36mFound (in ~/.ssh/) : \e[39m$foundSSHKeys"
+echo
+
+echo "\e[31m--Program Version Info--\e[39m"
+bashV=`bash --version | sed '1!d'` 2>/dev/null
+echo "\e[36mBash     : \e[39m$bashV"
+sudoV=`sudo --version | sed '1!d'` 2>/dev/null
+echo "\e[36msudo     : \e[39m$sudoV"
+gccV=`gcc --version | sed '1!d'` 2>/dev/null
+echo "\e[36mGCC      : \e[39m$gccV"
+printf "\e[36mPython 2 : \e[39m$python2V"	# This seems super hacky...
+python --version				# There's gotta be a better way.
+python3V=`python3 --version` 2>/dev/null
+echo "\e[36mPython 3 : \e[39m$python3V"
+javaV=`java --version | sed '1!d'` 2>/dev/null
+echo "\e[36mJava     : \e[39m$javaV"
+curlV=`curl --version | sed '1!d' | awk -F ' ' '{printf "%s %s %s", $1, $2, $3}'` 2>/dev/null
+echo "\e[36mcURL     : \e[39m$curlV"
+wgetV=`wget --version | sed '1!d'` 2>/dev/null
+echo "\e[36mwget     : \e[39m$wgetV"
+rubyV=`ruby --version` 2>/dev/null
+echo "\e[36mRuby     : \e[39m$rubyV"
+apache2V=`apache2 -v | sed '1!d' | awk -F ': ' '{print $2}'` 2>/dev/null
+echo "\e[36mApache 2 : \e[39m$apache2V"
 echo
 
