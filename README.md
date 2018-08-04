@@ -67,6 +67,16 @@ I AM NOT LIABLE FOR ANY DAMAGES CAUSED BY MISUSE OF THIS SOFTWARE.
 * Apache2 Version
 
 # TODO
-* Make a todo list.
-
-This list is incomplete. Be sure to let me know if I'm missing anything!
+## Checks
+* Locally open ports
+* Services
+* MAC addresses
+* sudo history
+## Other
+* Finish all the todo checks
+* Polish it up
+* Coffee
+* Update README.md to include typical stuff like install directions.
+* Make a GitHub page
+* Call it v1.0
+* Call it a day
