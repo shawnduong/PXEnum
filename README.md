@@ -17,7 +17,9 @@ $ wget https://raw.githubusercontent.com/shawnduong/PXEnum/master/PXEnume.sh
 ```
 
 # Usage
+```sh
 $ sh PXEnum.sh
+```
 
 # Checks
 * Username
