@@ -67,9 +67,6 @@ I AM NOT LIABLE FOR ANY DAMAGES CAUSED BY MISUSE OF THIS SOFTWARE.
 * Apache2 Version
 
 # TODO
-* A better way to handle gathering SSH keys
-* Login logs
-* sudo logs
-* Saved passwords from browsers
+* Made a todo list.
 
 This list is incomplete. Be sure to let me know if I'm missing anything!
