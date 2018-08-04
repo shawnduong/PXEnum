@@ -56,6 +56,7 @@ echo "\e[36mBIOS Version      : \e[39m$biosVersion"
 biosReleaseDate=`dmidecode | grep 'BIOS Information' -A 5 | grep 'Release Date' | awk -F ': ' '{print $2}'` 2>/dev/null
 echo "\e[36mBIOS Release Date : \e[39m$biosReleaseDate"
 echo
+
 echo "\e[31m--User Info--\e[39m"
 users=`awk -F: '{print $1}' /etc/passwd | sort | tr '\n' ' '` 2>/dev/null
 echo "\e[36mAll users        : \e[39m$users"
@@ -82,6 +83,8 @@ echo
 echo "\e[31m--Network Info--\e[39m"
 interfaces=`ip link show | sed '0~2d' | awk -F ': ' '{print $2}' | sort | tr '\n' ' '` 2>/dev/null
 echo "\e[36mNetwork interfaces  : \e[39m$interfaces"
+macs=`ip -o link  | awk '{print $2,$(NF-2)}' | tr '\n' ' '` 2>/dev/null
+echo "\e[36mMAC Addresses       : \e[39m$macs"
 localIPs=`ifconfig | grep 'inet ' | awk -F ' ' '{print $2}' | tr '\n' ' '` 2>/dev/null
 echo "\e[36mLocal IP addresses  : \e[39m$localIPs"
 routerIP=`ip route | grep 'default' | awk -F ' ' '{print $3}'` 2>/dev/null
@@ -135,15 +138,30 @@ processes=`ps -u | sed '1d' | awk -F ' ' '{printf "%s\t%s\n", $2, $11}' | grep -
 echo "$processes"
 echo
 
+echo "\e[31m--Services--\e[39m"
+onlineServices=`service --status-all | grep '\[ + \]'` 2>/dev/null
+echo "\e[36mOnline  : \e[39m"
+echo "$onlineServices"
+offlineServices=`service --status-all | grep '\[ - \]'` 2>/dev/null
+echo "\e[36mOffline : \e[39m"
+echo "$offlineServices"
+echo
+
 echo "\e[31m--Password Exfiltration--\e[39m"
 passwords=`cat /etc/shadow | grep -v "*\|!" | sort` 2>/dev/null
 echo "\e[36mSuccessfully exfiltrated passwords : \e[39m$passwords"
 echo
 
-echo "\e[31m--SetUID/SetGID Files--\e[31m"
+echo "\e[31m--SetUID/SetGID Files--\e[39m"
 suidFiles=`find / -perm /6000` 2>/dev/null
 echo "\e[36mFound : \e[39m"
 echo "$suidFiles"
+echo
+
+echo "\e[31m--sudo History--\e[39m"
+sudoHistory=`cat ~/.bash_history | grep 'sudo'` 2>/dev/null
+echo "\e[36mHistory : \e[39m"
+echo "$sudoHistory"
 echo
 
 echo "\e[31m--SSH Keys--\e[39m"
@@ -158,8 +176,8 @@ sudoV=`sudo --version | sed '1!d'` 2>/dev/null
 echo "\e[36msudo     : \e[39m$sudoV"
 gccV=`gcc --version | sed '1!d'` 2>/dev/null
 echo "\e[36mGCC      : \e[39m$gccV"
-printf "\e[36mPython 2 : \e[39m$python2V"	# This seems super hacky...
-python --version				# There's gotta be a better way.
+printf "\e[36mPython 2 : \e[39m$python2V"
+python --version
 python3V=`python3 --version` 2>/dev/null
 echo "\e[36mPython 3 : \e[39m$python3V"
 javaV=`java --version | sed '1!d'` 2>/dev/null

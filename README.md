@@ -31,6 +31,7 @@ I AM NOT LIABLE FOR ANY DAMAGES CAUSED BY MISUSE OF THIS SOFTWARE.
 * All Online Users
 * All Users with a Home Directory
 * Network Interfaces
+* MAC Addresses
 * Local IP Addresses
 * Router IP Addresses
 * Open Local Ports
@@ -51,9 +52,12 @@ I AM NOT LIABLE FOR ANY DAMAGES CAUSED BY MISUSE OF THIS SOFTWARE.
 * Cron Weekly
 * Cron Monthly
 * User Processes
+* Online Services
+* Offline Services
 * Password Hashes
 * SetUID Files
 * SetGID Files
+* sudo History
 * SSH Keys
 * Bash Version
 * sudo Version
@@ -68,12 +72,9 @@ I AM NOT LIABLE FOR ANY DAMAGES CAUSED BY MISUSE OF THIS SOFTWARE.
 
 # TODO
 ## Checks
-* Locally open ports
-* Services
-* MAC addresses
-* sudo history
+* All done!
 ## Other
-* Finish all the todo checks
+* ✓ Finish all the todo checks
 * Polish it up
 * Coffee
 * Update README.md to include typical stuff like install directions.
