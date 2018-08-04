@@ -1,9 +1,20 @@
 # PXEnum
-Post eXploitation Enumeration script for Linux. In development.
+Post eXploitation Enumeration script for Linux.
 
 # DISCLAIMER
 THIS TOOL IS MEANT TO BE USED FOR EDUCATIONAL PURPOSES ONLY.
+
 I AM NOT LIABLE FOR ANY DAMAGES CAUSED BY MISUSE OF THIS SOFTWARE.
+
+# Installation
+## With git
+```sh
+$ git clone https://github.com/shawnduong/PXEnum
+```
+## With wget
+```sh
+$ wget https://raw.githubusercontent.com/shawnduong/PXEnum/master/PXEnume.sh
+```
 
 # Checks
 * Username
@@ -75,9 +86,9 @@ I AM NOT LIABLE FOR ANY DAMAGES CAUSED BY MISUSE OF THIS SOFTWARE.
 * All done!
 ## Other
 * ✓ Finish all the todo checks
-* Polish it up
-* Coffee
-* Update README.md to include typical stuff like install directions.
+* ✓ Polish it up
+* ✓ Coffee
+* ✓ Update README.md to include typical stuff like install directions.
 * Make a GitHub page
 * Call it v1.0
 * Call it a day

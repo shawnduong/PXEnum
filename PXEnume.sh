@@ -2,15 +2,14 @@
 
 echo "\e[31mPXEnume\e[39m"
 echo "\e[31mP\e[39most e\e[31mX\e[39mploitation \e[31mEnume\e[39mration"
-echo "\e[31mAuthor : \e[39mShawn Duong"
-echo "\e[31mEmail  : \e[39mshawnduong@protonmail.com"
-echo "\e[31mGitHub : \e[39mhttps://github.com/shawnduong"
+echo "\e[31mVersion : \e[39mv1.0"
+echo "\e[31mAuthor  : \e[39mShawn Duong"
+echo "\e[31mEmail   : \e[39mshawnduong@protonmail.com"
+echo "\e[31mGitHub  : \e[39mhttps://github.com/shawnduong"
 echo 
 echo "\e[1;31mDISCLAIMER"
 echo "THIS TOOL IS MEANT TO BE USED FOR EDUCATIONAL PURPOSES ONLY."
 echo "I AM NOT LIABLE FOR ANY DAMAGES CAUSED BY MISUSE OF THIS SOFTWARE.\e[0;39m"
-echo
-echo "This tool is in development and has not been thoroughly tested."
 echo
 
 echo "\e[31m--Basic Info--\e[39m"
