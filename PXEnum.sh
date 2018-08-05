@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "\e[31mPXEnume\e[39m"
+echo "\e[31mPXEnum\e[39m"
 echo "\e[31mP\e[39most e\e[31mX\e[39mploitation \e[31mEnum\e[39meration"
 echo "\e[31mVersion : \e[39mv1.0"
 echo "\e[31mAuthor  : \e[39mShawn Duong"
