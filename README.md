@@ -13,7 +13,7 @@ $ git clone https://github.com/shawnduong/PXEnum
 ```
 ## With wget
 ```sh
-$ wget https://raw.githubusercontent.com/shawnduong/PXEnum/master/PXEnume.sh
+$ wget https://raw.githubusercontent.com/shawnduong/PXEnum/master/PXEnum.sh
 ```
 
 # Usage
