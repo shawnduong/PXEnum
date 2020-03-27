@@ -1,193 +1,403 @@
-#!/bin/bash
+#!/bin/sh
 
-echo "\e[31mPXEnum\e[39m"
-echo "\e[31mP\e[39most e\e[31mX\e[39mploitation \e[31mEnum\e[39meration"
-echo "\e[31mVersion : \e[39mv1.0"
-echo "\e[31mAuthor  : \e[39mShawn Duong"
-echo "\e[31mEmail   : \e[39mshawnduong@protonmail.com"
-echo "\e[31mGitHub  : \e[39mhttps://github.com/shawnduong"
-echo 
-echo "\e[1;31mDISCLAIMER"
-echo "THIS TOOL IS MEANT TO BE USED FOR EDUCATIONAL PURPOSES ONLY."
-echo "I AM NOT LIABLE FOR ANY DAMAGES CAUSED BY MISUSE OF THIS SOFTWARE.\e[0;39m"
+# PXEnum
+
+echo "--[ PXEnum ]--"
+echo "* Version : v2.0 (2020.3.27)"
+echo "* Source  : https://github.com/shawnduong/PXEnum"
+echo "----------------------------------------------"
 echo
 
-echo "\e[31m--Basic Info--\e[39m"
-user=`whoami` 2>/dev/null
-echo "\e[36mLogged in as : \e[39m$user"
-host=`uname -n` 2>/dev/null
-echo "\e[36mLogged into  : \e[39m$host"
-home=`echo $HOME` 2>/dev/null
-echo "\e[36mHome         : \e[39m$home"
-uid=`id -u` 2>/dev/null
-echo "\e[36mUser ID      : \e[39m$uid"
-groups=`groups | sort` 2>/dev/null
-echo "\e[36mGroups       : \e[39m$groups"
-kernel=`uname -s` 2>/dev/null
-echo "\e[36mKernel       : \e[39m$kernel"
-release=`uname -r` 2>/dev/null
-echo "\e[36mRelease      : \e[39m$release"
-version=`uname -v` 2>/dev/null
-echo "\e[36mVersion      : \e[39m$version"
-architecture=`uname -p` 2>/dev/null
-echo "\e[36mArchitecture : \e[39m$architecture"
-os=`uname -o` 2>/dev/null
-echo "\e[36mOS           : \e[39m$os"
+# Basic Information
+
+user=`whoami`          2> /dev/null # Current user
+host=`uname -n`        2> /dev/null # Network node hostname
+home=`echo $HOME`      2> /dev/null # User home directory
+usid=`id -u`           2> /dev/null # User ID
+gpid=`id -g`           2> /dev/null # Group ID
+grps=`groups`          2> /dev/null # List all groups
+knam=`uname -s`        2> /dev/null # Kernel name
+krel=`uname -r`        2> /dev/null # Kernel release
+kver=`uname -v`        2> /dev/null # Kernel version
+arch=`uname -m`        2> /dev/null # Architecture
+osys=`uname -o`        2> /dev/null # Operating System
+
+echo "--[ Basic Information ]--"
+echo "==> ABOUT THE USER"
+echo "* Username       : $user"
+echo "* Hostname       : $host"
+echo "* Home Path      : $home"
+echo "* EUID           : $usid"
+echo "* EGID           : $gpid"
+echo "* Groups         : $grps"
+echo "==> ABOUT THE SYSTEM"
+echo "* Kernel Name    : $knam"
+echo "* Kernel Release : $krel"
+echo "* kernel Version : $kver"
+echo "* Architecture   : $arch"
+echo "* OS Name        : $osys"
+echo "----------------------------------------------"
 echo
 
-echo "\e[31m--Hardware Info--\e[39m"
-cpu=`lscpu | grep 'Model name:' | awk -F ':' '{print $2}' | awk '{$1=$1};1'` 2>/dev/null
-echo "\e[36mCPU            : \e[39m$cpu"
-gpu=`lshw -C display | grep "product:" | awk -F ': ' '{print $2}'` 2>/dev/null
-echo "\e[36mGPU            : \e[39m$gpu"
-echo "\e[36mArchitecture   : \e[39m$architecture"
-memOnline=`lsmem | grep 'Total online memory:' | awk -F ':' '{print $2}' | awk '{$1=$1};1'` 2>/dev/null
-echo "\e[36mOnline memory  : \e[39m$memOnline"
-memOffline=`lsmem | grep 'Total offline memory:' | awk -F ':' '{print $2}' | awk '{$1=$1};1'` 2>/dev/null
-echo "\e[36mOffline memory : \e[39m$memOffline"
+# Hardware Information
+
+prdfmly=`cat /sys/class/dmi/id/product_family`  2> /dev/null # Product family
+prdname=`cat /sys/class/dmi/id/product_name`    2> /dev/null # Product name
+prdvers=`cat /sys/class/dmi/id/product_version` 2> /dev/null # Product Version
+
+# CPUs and bugs
+cpubugs=`
+	grep "model name\|bugs" /proc/cpuinfo |
+	awk -F ':' '{print "*",substr($2,2)}'
+	` 2> /dev/null
+
+meminfo=`grep "Mem" /proc/meminfo` 2> /dev/null # Memory information
+
+# Total memory in kB
+memtotl=`
+	grep "MemTotal:" <<< "$meminfo" |
+	awk -F ' ' '{print $(NF-1)}'
+	` 2> /dev/null
+
+# Available memory in kB
+memavbl=`
+	grep "MemAvailable" <<< "$meminfo" |
+	awk -F ' ' '{print $(NF-1)}'
+	` 2> /dev/null
+
+# Free memory in kB
+memfree=`
+	grep "MemFree:" <<< "$meminfo" |
+	awk -F ' ' '{print $(NF-1)}'
+	` 2> /dev/null
+
+echo "--[ Hardware Information ]--"
+echo "==> Product"
+echo "* Product Family  : $prdfmly"
+echo "* Product Name    : $prdname"
+echo "* Product Version : $prdvers"
+echo "==> CPUs and Bugs"
+echo "$cpubugs"
+echo "==> Memory"
+echo "* RAM Total      : $memtotl kB"
+echo "* RAM Available  : $memavbl kB"
+echo "* RAM Free       : $memfree kB"
+echo "----------------------------------------------"
 echo
 
-echo "\e[31m--BIOS Info--\e[39m"
-biosVendor=`dmidecode | grep 'BIOS Information' -A 5 | grep 'Vendor' | awk -F ': ' '{print $2}'` 2>/dev/null
-echo "\e[36mBIOS Vendor       : \e[39m$biosVendor"
-biosVersion=`dmidecode | grep 'BIOS Information' -A 5 | grep 'Version' | awk -F ': ' '{print $2}'` 2>/dev/null
-echo "\e[36mBIOS Version      : \e[39m$biosVersion"
-biosReleaseDate=`dmidecode | grep 'BIOS Information' -A 5 | grep 'Release Date' | awk -F ': ' '{print $2}'` 2>/dev/null
-echo "\e[36mBIOS Release Date : \e[39m$biosReleaseDate"
+# BIOS Information
+
+biosvend=`cat /sys/class/dmi/id/bios_vendor`  2> /dev/null # Vendor
+biosdate=`cat /sys/class/dmi/id/bios_date`    2> /dev/null # Date
+biosvers=`cat /sys/class/dmi/id/bios_version` 2> /dev/null # Version
+
+echo "--[ BIOS Information ]--"
+echo "* BIOS Vendor  : $biosvend"
+echo "* BIOS Date    : $biosdate"
+echo "* BIOS Version : $biosvers"
+echo "----------------------------------------------"
 echo
 
-echo "\e[31m--User Info--\e[39m"
-users=`awk -F: '{print $1}' /etc/passwd | sort | tr '\n' ' '` 2>/dev/null
-echo "\e[36mAll users        : \e[39m$users"
-groups=`cut -d: -f1 /etc/group | sort | tr '\n' ' '` 2>/dev/null
-echo "\e[36mAll groups       : \e[39m$groups"
-sudoers=`cat /etc/group | grep 'sudo' | awk -F ':' '{print $4}' | tr '\n' ' '` 2>/dev/null
-echo "\e[36mSuper users      : \e[39m$sudoers"
-usersUIDs=`awk -F: '{printf "%s:%s\n",$1,$3}' /etc/passwd | sort | tr '\n' ' '` 2>/dev/null
-echo "\e[36mAll users + UIDs : \e[39m$usersUIDs"
-onlineUsers=`users` 2>/dev/null
-echo "\e[36mLogged in users  : \e[39m$onlineUsers"
-homedUsers=`cat /etc/passwd | grep '/home/' | awk -F: '{print $1}' | sort | tr '\n' ' '` 2>/dev/null
-echo "\e[36mUsers with homes : \e[39m$homedUsers"
-userHomes=`cat /etc/passwd | grep '/home/' | awk -F: '{printf "%s:%s\n",$1,$6}' | sort | tr '\n' ' '` 2>/dev/null
-echo "\e[36mUser homes       : \e[39m$userHomes"
-wOut=`w` 2>/dev/null
-echo "\e[36mw output         : \e[39m"
-echo "$wOut"
-whoOut=`who` 2>/dev/null
-echo "\e[36mwho output       : \e[39m"
-echo "$whoOut"
+# Users and Groups
+
+# Sorted list of all users
+auser=`
+	printf "* %-24s %8s %8s   %s\n" "(Shell)" "(GID)" "(UID)" "(User)"          ;
+	awk -F ':' '{printf "* %-24s %8s %8s   %s\n", $NF, $3, $4, $1}' /etc/passwd |
+	sort
+	` 2> /dev/null
+
+# Sorted list of users with shells
+suser=`
+	printf "* %-24s %s\n" "(Shell)" "(User)"      ;
+	grep -v "/usr/bin/nologin" /etc/passwd        |
+	awk -F ':' '{printf "* %-24s %s\n", $NF, $1}' |
+	sort
+	` 2> /dev/null
+
+# Sorted list of users with home directories
+huser=`
+	printf "* %-24s %s\n" "(Home Directory)" "User"   ;
+	grep -v ":/:" /etc/passwd                         |
+	awk -F ':' '{printf "* %-24s %s\n", $(NF-1), $1}' |
+	sort
+	` 2> /dev/null
+
+# Sorted list of groups
+grups=`
+	printf "* %-8s %s\n" "(GID)" "(Group)"                 ;
+	awk -F ':' '{printf "* %-8s %s\n", $3, $1}' /etc/group |
+	sort -V
+	` 2> /dev/null
+
+echo "--[ Users and Groups ]--"
+echo "==> Users"
+echo "$auser"
+echo "==> Users with login shells"
+echo "$suser"
+echo "==> Users with home directories"
+echo "$huser"
+echo "==> Groups"
+echo "$grups"
+echo "----------------------------------------------"
 echo
 
-echo "\e[31m--Network Info--\e[39m"
-interfaces=`ip link show | sed '0~2d' | awk -F ': ' '{print $2}' | sort | tr '\n' ' '` 2>/dev/null
-echo "\e[36mNetwork interfaces  : \e[39m$interfaces"
-macs=`ip -o link  | awk '{print $2,$(NF-2)}' | tr '\n' ' '` 2>/dev/null
-echo "\e[36mMAC Addresses       : \e[39m$macs"
-localIPs=`ifconfig | grep 'inet ' | awk -F ' ' '{print $2}' | tr '\n' ' '` 2>/dev/null
-echo "\e[36mLocal IP addresses  : \e[39m$localIPs"
-routerIP=`ip route | grep 'default' | awk -F ' ' '{print $3}'` 2>/dev/null
-echo "\e[36mRouter IP addresses : \e[39m$routerIP"
-openPorts=`netstat -tulpn | grep 'LISTEN' | awk -F ' ' '{print $4}' | tr '\n' ' '` 2>/dev/null
-echo "\e[36mLocally open ports  : \e[39m$openPorts"
-publicIP=`dig +short myip.opendns.com @resolver1.opendns.com` 2>/dev/null
-echo "\e[36mPublic IP address   : \e[39m$publicIP"
+# Network Information
+
+ipdata=`ip -o link show` # IP data.
+
+# Interfaces
+ifaces=`
+	printf "* %-16s %s\n" "(Interface)" "(Flags)"      ;
+	awk -F ' ' '{printf "* %-16s %s\n", \
+		substr($2,1,length($2)-1), $3}'  <<< "$ipdata" |
+	sort
+	` 2> /dev/null
+
+# MAC addresses
+maddrs=`
+	printf "* %-16s %s\n" "(Interface)" "(MAC Address)"    ;
+	awk -F ' ' '{printf "* %-16s %s\n", \
+		substr($2,1,length($2)-1), $(NF-2)}' <<< "$ipdata" |
+	sort
+	` 2> /dev/null
+
+# IP addresses
+iaddrs=`
+	printf "* %-16s %s\n" "(Interface)" "(IP Address)" ;
+	ip address                                         |
+	grep "inet "                                       |
+	awk -F ' ' '{printf "* %-16s %s\n", $NF, $2}'      ;
+	printf "* %-16s %s\n" "(Public)" "(IP Address)"    ;
+	printf "* %-16s " "Public"                         ;
+	dig +short myip.opendns.com @resolver1.opendns.com ;
+	` 2> /dev/null
+
+# Open ports
+oports=`
+	printf "* %-8s %-24s %s\n" "(Type)" "(Address)" "(PID/Program)" ;
+	netstat -tulpn 2> /dev/null                                     |
+	grep "LISTEN"                                                   |
+	awk -F ' ' '{printf "* %-8s %-24s %s\n", $1, $4, $NF}'
+	` 2> /dev/null
+
+echo "--[ Network Information ]--"
+echo "==> Interfaces"
+echo "$ifaces"
+echo "==> MAC Addresses"
+echo "$maddrs"
+echo "==> IP Addresses"
+echo "$iaddrs"
+echo "==> Open Ports"
+echo "$oports"
+echo "----------------------------------------------"
 echo
 
-echo "\e[31m--Location Info (Based on Network)--\e[39m"
-info=`curl http://ip-api.com/line/$publicIP` 2>/dev/null
-country=`echo "$info" | sed '2!d'` 2>/dev/null
-echo "\e[36mCountry      : \e[39m$country"
-region=`echo "$info" | sed '5!d'` 2>/dev/null
-echo "\e[36mRegion       : \e[39m$region"
-city=`echo "$info" | sed '6!d'` 2>/dev/null
-echo "\e[36mCity         : \e[39m$city"
-zip=`echo "$info" | sed '7!d'` 2>/dev/null
-echo "\e[36mZIP Code     : \e[39m$zip"
-lat=`echo "$info" | sed '8!d'` 2>/dev/null
-lon=`echo "$info" | sed '9!d'` 2>/dev/null
-echo "\e[36mlat, lon     : \e[39m$lat $lon"
-timezone=`echo "$info" | sed '10!d'` 2>/dev/null
-echo "\e[36mTime zone    : \e[39m$timezone"
-isp=`echo "$info" | sed '11!d'` 2>/dev/null
-echo "\e[36mISP          : \e[39m$isp"
-organization=`echo "$info" | sed '12!d'` 2>/dev/null
-echo "\e[36mOrganization : \e[39m$organization"
-asn=`echo "$info" | sed '13!d'` 2>/dev/null
-echo "\e[36mAS Number    : \e[39m$asn"
+# Activity
+
+# Current users
+currusers=`
+	printf "* %-12s %-6s %-16s %-8s %-8s %s\n" \
+		"(Username)" "(Term)" "(IP Address)" "(Login)" "(Idle)" "(Current Activity)" ;
+	w -i                                                                             |
+	tail +3                                                                          |
+	awk -F ' ' '{printf "* %-12s %-6s %-16s %-8s %-8s %s\n", \
+		$1, $2, $3, $4, $5, $NF}'                                                    |
+	sort
+	` 2> /dev/null
+
+# Current processes
+currprocs=`
+	printf "* %-12s %-8s %s\n" "(Username)" "(PID)" "(Process)" ;
+	ps -aux                                                     |
+	tail +2                                                     |
+	awk -F ' ' '{printf "* %-12s %-8s %s\n", $1, $2, $11}'      |
+	sort -V
+	` 2> /dev/null
+
+# Active services
+srvactive=`
+	systemctl --type=service --state=active |
+	grep "active "                          |
+	awk -F ' ' '{print "*",$1}'             |
+	sort
+	` 2> /dev/null
+
+# Running services
+srvrunnin=`
+	systemctl --type=service --state=running |
+	grep "running"                           |
+	awk -F ' ' '{print "*",$1}'              |
+	sort
+	` 2> /dev/null
+
+echo "--[ Activity ]--"
+echo "==> Currently Online Users"
+echo "$currusers"
+echo "==> Currently Running Processes"
+echo "$currprocs"
+echo "==> Active Services"
+echo "$srvactive"
+echo "==> Running Services"
+echo "$srvrunnin"
+echo "----------------------------------------------"
 echo
 
-echo "\e[31m--Cron Info--\e[39m"
-crond=`ls /etc/cron.d/ | tr '\n' ' '` 2>/dev/null
-echo "\e[36mcron.d       : \e[39m$crond"
-cronhourly=`ls /etc/cron.hourly/ | tr '\n' ' '` 2>/dev/null
-echo "\e[36mcron.hourly  : \e[39m$cronhourly"
-crondaily=`ls /etc/cron.daily/ | tr '\n' ' '` 2>/dev/null
-echo "\e[36mcron.daily   : \e[39m$crondaily"
-cronweekly=`ls /etc/cron.weekly/ | tr '\n' ' '` 2>/dev/null
-echo "\e[36mcron.weekly  : \e[39m$cronweekly"
-cronmonthly=`ls /etc/cron.monthly/ | tr '\n' ' '` 2>/dev/null
-echo "\e[36mcron.monthly : \e[39m$cronmonthly"
+# Timers
+
+# Sorted list of timers
+timers=`
+	printf "* %-32s %s\n" "(Timer)" "(Service)"        ;
+	systemctl list-timers                              |
+	grep ".*\.timer"                                   |
+	awk -F ' ' '{printf "* %-32s %s\n", $(NF-1), $NF}' |
+	sort
+	` 2> /dev/null
+
+echo "--[ Timers ]--"
+echo "$timers"
+echo "----------------------------------------------"
 echo
 
-echo "\e[31m--Processes--\e[39m"
-echo "\e[36mUser processes (excluding GNOME/KDE) : \e[39m"
-echo "\e[36mPID\tProcess\e[39m"
-processes=`ps -u | sed '1d' | awk -F ' ' '{printf "%s\t%s\n", $2, $11}' | grep -v 'gnome\|kde'` 2>/dev/null
-echo "$processes"
+# /etc/shadow Permissions
+
+shadow=`ls -l /etc/shadow`                     2> /dev/null # Shadow dump
+permis=`awk -F ' ' '{print $1}' <<< "$shadow"` 2> /dev/null # Permissions
+sowner=`awk -F ' ' '{print $3}' <<< "$shadow"` 2> /dev/null # Owner
+sgroup=`awk -F ' ' '{print $4}' <<< "$shadow"` 2> /dev/null # Group
+
+echo "--[ /etc/shadow Permissions ]--"
+echo "* Access : $permis"
+echo "* Owner  : $sowner"
+echo "* Group  : $sgroup"
+echo "----------------------------------------------"
 echo
 
-echo "\e[31m--Services--\e[39m"
-onlineServices=`service --status-all | grep '\[ + \]'` 2>/dev/null
-echo "\e[36mOnline  : \e[39m"
-echo "$onlineServices"
-offlineServices=`service --status-all | grep '\[ - \]'` 2>/dev/null
-echo "\e[36mOffline : \e[39m"
-echo "$offlineServices"
+# /etc/sudoers Permissions
+
+sudoers=`ls -l /etc/sudoers`                     2> /dev/null # Sudoers dump
+superms=`awk -F ' ' '{print $1}' <<< "$sudoers"` 2> /dev/null # Permissions
+suowner=`awk -F ' ' '{print $3}' <<< "$sudoers"` 2> /dev/null # Owner
+sugroup=`awk -F ' ' '{print $4}' <<< "$sudoers"` 2> /dev/null # Group
+
+echo "--[ /etc/sudoers Permissions ]--"
+echo "* Access : $superms"
+echo "* Owner  : $suowner"
+echo "* Group  : $sugroup"
+echo "----------------------------------------------"
 echo
 
-echo "\e[31m--Password Exfiltration--\e[39m"
-passwords=`cat /etc/shadow | grep -v "*\|!" | sort` 2>/dev/null
-echo "\e[36mSuccessfully exfiltrated passwords : \e[39m$passwords"
+# Possible SUIDs
+
+# SUID files
+suids=`
+	find / -perm /6000 2> /dev/null |
+	awk '{print "*",$0}'
+	` 2> /dev/null
+
+echo "--[ Possible SUIDs ]--"
+echo "$suids"
+echo "----------------------------------------------"
 echo
 
-echo "\e[31m--SetUID/SetGID Files--\e[39m"
-suidFiles=`find / -perm /6000` 2>/dev/null
-echo "\e[36mFound : \e[39m"
-echo "$suidFiles"
+# sudo History
+
+# Read sudo history from bash history
+shist=`
+	grep "sudo " ~/.bash_history 2> /dev/null |
+	awk '{print "*",$0}'
+	` 2> /dev/null
+
+echo "--[ sudo History ]--"
+echo "$shist"
+echo "----------------------------------------------"
 echo
 
-echo "\e[31m--sudo History--\e[39m"
-sudoHistory=`cat ~/.bash_history | grep 'sudo'` 2>/dev/null
-echo "\e[36mHistory : \e[39m"
-echo "$sudoHistory"
+# SSH Keys
+
+# Find SSH keys in home directories
+sshkeys=`
+	ls /home/*/.ssh/*.rsa /home/*/.ssh/*.pub \
+		/root/.ssh/*.rsa /root/.ssh/*.pub 2> /dev/null |
+	awk '{print "*",$0}'
+	` 2> /dev/null
+
+echo "--[ SSH Keys ]--"
+echo "$sshkeys"
+echo "----------------------------------------------"
 echo
 
-echo "\e[31m--SSH Keys--\e[39m"
-foundSSHKeys=`ls ~/.ssh/ | grep '.pub\|rsa' | tr '\n' ' '` 2>/dev/null
-echo "\e[36mFound (in ~/.ssh/) : \e[39m$foundSSHKeys"
-echo
+# Versions
 
-echo "\e[31m--Program Version Info--\e[39m"
-bashV=`bash --version | sed '1!d'` 2>/dev/null
-echo "\e[36mBash     : \e[39m$bashV"
-sudoV=`sudo --version | sed '1!d'` 2>/dev/null
-echo "\e[36msudo     : \e[39m$sudoV"
-gccV=`gcc --version | sed '1!d'` 2>/dev/null
-echo "\e[36mGCC      : \e[39m$gccV"
-printf "\e[36mPython 2 : \e[39m$python2V"
-python --version
-python3V=`python3 --version` 2>/dev/null
-echo "\e[36mPython 3 : \e[39m$python3V"
-javaV=`java --version | sed '1!d'` 2>/dev/null
-echo "\e[36mJava     : \e[39m$javaV"
-curlV=`curl --version | sed '1!d' | awk -F ' ' '{printf "%s %s %s", $1, $2, $3}'` 2>/dev/null
-echo "\e[36mcURL     : \e[39m$curlV"
-wgetV=`wget --version | sed '1!d'` 2>/dev/null
-echo "\e[36mwget     : \e[39m$wgetV"
-rubyV=`ruby --version` 2>/dev/null
-echo "\e[36mRuby     : \e[39m$rubyV"
-apache2V=`apache2 -v | sed '1!d' | awk -F ': ' '{print $2}'` 2>/dev/null
-echo "\e[36mApache 2 : \e[39m$apache2V"
-echo
+# Bash
+vbash=`
+	bash --version |
+	head -1        |
+	awk -F ' ' '{printf $4}'
+	` 2> /dev/null
 
+# sudo
+vsudo=`
+	sudo --version |
+	head -1        |
+	awk -F ' ' '{printf $3}'
+	` 2> /dev/null
+
+# GCC
+vrgcc=`
+	gcc --version |
+	head -1       |
+	awk -F ' ' '{printf $NF}'
+	` 2> /dev/null
+
+# Python 2
+vpyt2=`
+	python2 --version 2>&1 |
+	awk -F ' ' '{print $2}'
+	` 2> /dev/null
+
+# Python3
+vpyt3=`
+	python3 --version |
+	awk -F ' ' '{print $2}'
+	` 2> /dev/null
+
+# Java
+vjava=`
+	java --version |
+	head -1        |
+	awk -F ' ' '{print $2}'
+	` 2> /dev/null
+
+# cURL
+vcurl=`
+	curl --version |
+	head -1        |
+	awk -F ' ' '{print $2}'
+	` 2> /dev/null
+
+# wget
+vwget=`
+	wget --version |
+	head -1        |
+	awk -F ' ' '{print $3}'
+	` 2> /dev/null
+
+# Ruby
+vruby=`
+	ruby --version |
+	awk -F ' ' '{print $2}'
+	` 2> /dev/null
+
+echo "--[ Versions ]--"
+echo "* Bash     : $vbash"
+echo "* sudo     : $vsudo"
+echo "* GCC      : $vrgcc"
+echo "* Python 2 : $vpyt2"
+echo "* Python 3 : $vpyt3"
+echo "* Java     : $vjava"
+echo "* cURL     : $vcurl"
+echo "* wget     : $vwget"
+echo "* Ruby     : $vruby"
+echo "----------------------------------------------"
+echo
