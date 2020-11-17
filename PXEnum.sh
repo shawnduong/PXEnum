@@ -3,7 +3,7 @@
 # PXEnum
 
 echo "--[ PXEnum ]--"
-echo "* Version : v2.0 (2020.3.27)"
+echo "* Version : v2.0.1 (2020.11.17)"
 echo "* Source  : https://github.com/shawnduong/PXEnum"
 echo "----------------------------------------------"
 echo
@@ -55,19 +55,22 @@ meminfo=`grep "Mem" /proc/meminfo` 2> /dev/null # Memory information
 
 # Total memory in kB
 memtotl=`
-	grep "MemTotal:" <<< "$meminfo" |
+	echo "$meminfo"  |
+	grep "MemTotal:" |
 	awk -F ' ' '{print $(NF-1)}'
 	` 2> /dev/null
 
 # Available memory in kB
 memavbl=`
-	grep "MemAvailable" <<< "$meminfo" |
+	echo "$meminfo"     | 
+	grep "MemAvailable" |
 	awk -F ' ' '{print $(NF-1)}'
 	` 2> /dev/null
 
 # Free memory in kB
 memfree=`
-	grep "MemFree:" <<< "$meminfo" |
+	echo "$meminfo" |
+	grep "MemFree:" |
 	awk -F ' ' '{print $(NF-1)}'
 	` 2> /dev/null
 
@@ -148,17 +151,19 @@ ipdata=`ip -o link show` # IP data.
 
 # Interfaces
 ifaces=`
-	printf "* %-16s %s\n" "(Interface)" "(Flags)"      ;
+	printf "* %-16s %s\n" "(Interface)" "(Flags)" ;
+	echo "$ipdata"                                |
 	awk -F ' ' '{printf "* %-16s %s\n", \
-		substr($2,1,length($2)-1), $3}'  <<< "$ipdata" |
+		substr($2,1,length($2)-1), $3}'           |
 	sort
 	` 2> /dev/null
 
 # MAC addresses
 maddrs=`
-	printf "* %-16s %s\n" "(Interface)" "(MAC Address)"    ;
+	printf "* %-16s %s\n" "(Interface)" "(MAC Address)" ;
+	echo "$ipdata"                                      |
 	awk -F ' ' '{printf "* %-16s %s\n", \
-		substr($2,1,length($2)-1), $(NF-2)}' <<< "$ipdata" |
+		substr($2,1,length($2)-1), $(NF-2)}'            |
 	sort
 	` 2> /dev/null
 
@@ -261,10 +266,10 @@ echo
 
 # /etc/shadow Permissions
 
-shadow=`ls -l /etc/shadow`                     2> /dev/null # Shadow dump
-permis=`awk -F ' ' '{print $1}' <<< "$shadow"` 2> /dev/null # Permissions
-sowner=`awk -F ' ' '{print $3}' <<< "$shadow"` 2> /dev/null # Owner
-sgroup=`awk -F ' ' '{print $4}' <<< "$shadow"` 2> /dev/null # Group
+shadow=`ls -l /etc/shadow`                        2> /dev/null # Shadow dump
+permis=`echo "$shadow" | awk -F ' ' '{print $1}'` 2> /dev/null # Permissions
+sowner=`echo "$shadow" | awk -F ' ' '{print $3}'` 2> /dev/null # Owner
+sgroup=`echo "$shadow" | awk -F ' ' '{print $4}'` 2> /dev/null # Group
 
 echo "--[ /etc/shadow Permissions ]--"
 echo "* Access : $permis"
@@ -275,10 +280,10 @@ echo
 
 # /etc/sudoers Permissions
 
-sudoers=`ls -l /etc/sudoers`                     2> /dev/null # Sudoers dump
-superms=`awk -F ' ' '{print $1}' <<< "$sudoers"` 2> /dev/null # Permissions
-suowner=`awk -F ' ' '{print $3}' <<< "$sudoers"` 2> /dev/null # Owner
-sugroup=`awk -F ' ' '{print $4}' <<< "$sudoers"` 2> /dev/null # Group
+sudoers=`ls -l /etc/sudoers`                        2> /dev/null # Sudoers dump
+superms=`echo "$sudoers" | awk -F ' ' '{print $1}'` 2> /dev/null # Permissions
+suowner=`echo "$sudoers" | awk -F ' ' '{print $3}'` 2> /dev/null # Owner
+sugroup=`echo "$sudoers" | awk -F ' ' '{print $4}'` 2> /dev/null # Group
 
 echo "--[ /etc/sudoers Permissions ]--"
 echo "* Access : $superms"
