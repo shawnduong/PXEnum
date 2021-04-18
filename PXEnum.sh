@@ -223,7 +223,7 @@ currprocs=`
 # Active services
 srvactive=`
 	systemctl --type=service --state=active |
-	grep "active "                          |
+	grep "service.*active"                  |
 	awk -F ' ' '{print "*",$1}'             |
 	sort
 	` 2> /dev/null
@@ -231,7 +231,7 @@ srvactive=`
 # Running services
 srvrunnin=`
 	systemctl --type=service --state=running |
-	grep "running"                           |
+	grep "service.*running"                  |
 	awk -F ' ' '{print "*",$1}'              |
 	sort
 	` 2> /dev/null

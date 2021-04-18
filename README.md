@@ -37,6 +37,10 @@ __Method 2: Passing it through the shell interpreter__
 $ sh PXEnum.sh
 ```
 
+## v2.0.2 (2021.04.18) Changelog
+
+* Fixed a bug occurring in the outputting of active/running services.
+
 ## v2.0.1 (2020.11.17) Changelog
 
 * Fixed a bug occurring in the default shells of some systems related to unexpected redirections.
